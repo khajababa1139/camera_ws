@@ -5,8 +5,8 @@ import numpy as np
 import sys
 import time
 
-SERVER_IP = "127.0.0.1"  # Change to your server's IP if needed
-SERVER_PORT = 8765        # Change if needed
+SERVER_IP = ""  # Change to your server's IP if needed
+SERVER_PORT = None       # Change if needed
 
 async def receive_stream(uri):
     while True:

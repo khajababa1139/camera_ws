@@ -86,7 +86,7 @@ async def send_frames():
 
     cap.release()
 
-async def handler(websocket, path):
+async def handler(websocket):
     connected_clients.add(websocket)
     print(f"[+] Client connected: {websocket.remote_address}")
     try:
@@ -95,15 +95,13 @@ async def handler(websocket, path):
         connected_clients.remove(websocket)
         print(f"[-] Client disconnected: {websocket.remote_address}")
 
-async def run_server_and_frames():
-    server = await websockets.serve(handler, config.IP, 8765)
+async def detector():
+    server = await websockets.serve(handler, config.IP, sys.argv[2])
     print(f"WebSocket server started on ws://{config.IP}:8765")
     await send_frames()
 
 # Run the asyncio event loop immediately at the global scope
 try:
-    asyncio.run(run_server_and_frames())
+    asyncio.run(detector())
 except KeyboardInterrupt:
     print("\n[Exit] Server interrupted by user.")
-    cap.release()
-    cv2.destroyAllWindows()

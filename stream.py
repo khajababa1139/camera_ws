@@ -23,9 +23,9 @@ async def stream_camera(websocket, path, cam_index):
     finally:
         cap.release()
 
-async def main():
+async def streamer():
     if len(sys.argv) < 2:
-        print("Usage: python stream.py <camera_index>")
+        print("Usage: python stream.py <camera_index> <camera_port>")
         sys.exit(1)
 
     try:
@@ -38,8 +38,10 @@ async def main():
         await stream_camera(websocket, path, cam_index)
 
     print(f"WebSocket streaming from camera {cam_index} on ws://{config.IP}:8765 ...")
-    async with websockets.serve(handler, config.IP, 8765):
+    async with websockets.serve(handler, config.IP, sys.argv[2]):
         await asyncio.Future()  # run forever
 
-if __name__ == "__main__":
-    asyncio.run(main())
+try:
+    asyncio.run(streamer())
+except KeyboardInterrupt:
+    print("\n[Exit] Server interrupted by user.")
