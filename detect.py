@@ -46,6 +46,10 @@ async def send_frames():
     global retry_count
 
     while True:
+        # Wait until at least one client is connected
+        while not connected_clients:
+            await asyncio.sleep(0.1)  # check every 100ms
+
         try:
             start = time.time()
             ret, frame = cap.read()
